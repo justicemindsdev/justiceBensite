@@ -20,6 +20,7 @@ export const siteConfig = {
     { title: "Endorsements", url: "/endorsements" },
     { title: "Certification", url: "/certificates" },
     { title: "Portal", url: "/portal" },
+    { title: "Analytics", url: "/analytics" },
     { title: "Contact Us", url: "/contact", isButton: true }
   ],
   

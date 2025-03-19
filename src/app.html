@@ -27,71 +27,75 @@
             const dropdownContent = document.querySelector('.dropdown-content');
             let isDropdownOpen = false;
             
-            // Toggle dropdown on click
-            dropdownToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!isDropdownOpen) {
+            // Only add event listeners if the elements exist
+            if (dropdown && dropdownToggle && dropdownContent) {
+                // Toggle dropdown on click
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!isDropdownOpen) {
+                        dropdownContent.classList.add('active');
+                        isDropdownOpen = true;
+                    } else {
+                        dropdownContent.classList.remove('active');
+                        isDropdownOpen = false;
+                    }
+                });
+                
+                // Show dropdown on hover and keep it visible
+                dropdown.addEventListener('mouseenter', function() {
                     dropdownContent.classList.add('active');
                     isDropdownOpen = true;
-                } else {
-                    dropdownContent.classList.remove('active');
-                    isDropdownOpen = false;
-                }
-            });
-            
-            // Show dropdown on hover and keep it visible
-            dropdown.addEventListener('mouseenter', function() {
-                dropdownContent.classList.add('active');
-                isDropdownOpen = true;
-            });
-            
-            // Keep dropdown visible when hovering over it
-            dropdownContent.addEventListener('mouseenter', function() {
-                dropdownContent.classList.add('active');
-                isDropdownOpen = true;
-            });
-            
-            // Only hide dropdown when mouse leaves both the toggle and the content
-            dropdown.addEventListener('mouseleave', function(e) {
-                // Check if mouse is moving to the dropdown content
-                if (!e.relatedTarget || !dropdown.contains(e.relatedTarget)) {
-                    // Use a timeout to allow moving to the dropdown content
-                    setTimeout(function() {
-                        if (!dropdown.matches(':hover') && !dropdownContent.matches(':hover')) {
-                            dropdownContent.classList.remove('active');
-                            isDropdownOpen = false;
-                        }
-                    }, 100);
-                }
-            });
-            
-            dropdownContent.addEventListener('mouseleave', function() {
-                if (!dropdown.matches(':hover')) {
-                    dropdownContent.classList.remove('active');
-                    isDropdownOpen = false;
-                }
-            });
-            
-            // Prevent dropdown from closing when clicking inside it
-            dropdownContent.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!dropdown.contains(e.target)) {
-                    dropdownContent.classList.remove('active');
-                    isDropdownOpen = false;
-                }
-            });
+                });
+                
+                // Keep dropdown visible when hovering over it
+                dropdownContent.addEventListener('mouseenter', function() {
+                    dropdownContent.classList.add('active');
+                    isDropdownOpen = true;
+                });
+                
+                // Only hide dropdown when mouse leaves both the toggle and the content
+                dropdown.addEventListener('mouseleave', function(e) {
+                    // Check if mouse is moving to the dropdown content
+                    if (!e.relatedTarget || !dropdown.contains(e.relatedTarget)) {
+                        // Use a timeout to allow moving to the dropdown content
+                        setTimeout(function() {
+                            if (!dropdown.matches(':hover') && !dropdownContent.matches(':hover')) {
+                                dropdownContent.classList.remove('active');
+                                isDropdownOpen = false;
+                            }
+                        }, 100);
+                    }
+                });
+                
+                dropdownContent.addEventListener('mouseleave', function() {
+                    if (!dropdown.matches(':hover')) {
+                        dropdownContent.classList.remove('active');
+                        isDropdownOpen = false;
+                    }
+                });
+                
+                // Prevent dropdown from closing when clicking inside it
+                dropdownContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!dropdown.contains(e.target)) {
+                        dropdownContent.classList.remove('active');
+                        isDropdownOpen = false;
+                    }
+                });
+            }
             
             // News search - open in new window
             const searchLink = document.querySelector('a[href="#search"]');
-            
-            searchLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.open('/Users/infiniteintelligence/Indian Genius/benmak/sarasearch.html', '_blank');
-            });
+            if (searchLink) {
+                searchLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.open('/search', '_blank');
+                });
+            }
         });
     </script>
     <script type="text/babel">
@@ -104,7 +108,7 @@
                 name: "Westminster City Council",
                 title: "WESTMINSTER ENDORSEMENT",
                 subtitle: "CITY COUNCIL RECOGNITION",
-                imgUrl: "assets/Logo%20final/processed_city%20westminster.png",
+                imgUrl: "/assets/organized/logos/processed_city westminster.png",
                 color: "#3B82F6",
                 content: "As part of Ben Mak's extensive contributions to public advocacy, he has been recognized by Westminster Outreach for his expertise, legal knowledge, and ability to inspire others through public speaking engagements."
             },
@@ -113,7 +117,7 @@
                 name: "House of Commons",
                 title: "PARLIAMENTARY ENDORSEMENT",
                 subtitle: "HOUSE OF COMMONS RECOGNITION",
-                imgUrl: "assets/Logo%20final/processed_house%20commons.png",
+                imgUrl: "/assets/organized/logos/processed_house commons.png",
                 color: "#10B981",
                 content: "Ben's advocacy has been recognized at the highest levels of government, with direct support from Dan Carden MP and Liverpool City Council's Chief Executive Tony Reeves. \"Dear Ben, Thank you for recently contacting my office about your concerns...I hope my support and contacting Liverpool City Council for a referral to social services has been of some assistance and helped towards this.\" — Parliamentory - Tony Reeves, Cheif Executive - The House of Commons",
 				doc:"/CERTIFICATES%20ENDORESEMENTS/asdas.jpeg"
@@ -124,7 +128,7 @@
                 title: "LOCAL AUTHORITY RECOGNITION",
                 subtitle: "PRACTITIONER ENDORSEMENT",
                 content: "Practioner of 19 years \"honoured\" to meet Ben",
-                imgUrl: "assets/Logo%20final/processed_lpool%20city%20counil%20.png",
+                imgUrl: "/assets/organized/logos/processed_lpool city counil .png",
                 color: "#6366F1",
                 content: "Ben's committed work on Liverpool City Council to supporting and enhancing service provision and relationship efficacy Acknowledged by 19 years Fostering Social Worker."
             },
@@ -133,7 +137,7 @@
                 name: "Department of Health",
                 title: "SECRETARY OF STATE ENGAGEMENT",
                 subtitle: "Health and Social Care communications",
-                imgUrl: "assets/Logo%20final/processed_download.png",
+                imgUrl: "/assets/organized/logos/processed_download.png",
                 color: "#22C55E",
                 content: "Sajid Javid Health and social care 2021-2022 Highlighting matters raised and acknowledged by Cheif executive of Liverpool City Council. Ben's endured resliance get's a response and matters to thier attention."
             },
@@ -142,7 +146,7 @@
                 name: "Justice Recognition",
                 title: "JUSTICE ENDORSEMENT",
                 subtitle: "LEGAL ADVOCACY RECOGNITION",
-                imgUrl: "assets/Logo%20final/processed_justice%20.png",
+                imgUrl: "/assets/organized/logos/processed_justice .png",
                 color: "#8B5CF6",
                 content: "Ben's legal acumen and perseverance have been recognized in the High Court of Justice, successful appeal revision despite statistics on 1% liklihood. Demonstrating exceptional advocacy skills."
             },
@@ -151,7 +155,7 @@
                 name: "NSPCC",
                 title: "NSPCC ENDORSEMENT",
                 subtitle: "CHILD PROTECTION RECOGNITION",
-                imgUrl: "assets/Logo%20final/processed_nspsc.png",
+                imgUrl: "/assets/organized/logos/processed_nspsc.png",
                 color: "#EF4444",
                 content: "Ben's commitment to child protection and safeguarding has been recognized by the NSPCC."
             },
@@ -160,7 +164,7 @@
                 name: "OBE Nomination",
                 title: "OBE NOMINATION INTERVIEW",
                 subtitle: "ORDER OF THE BRITISH EMPIRE",
-                imgUrl: "assets/Logo%20final/processed_OBE-GOLD-Effect-logo.png",
+                imgUrl: "/assets/organized/logos/processed_OBE-GOLD-Effect-logo.png",
                 color: "#F59E0B",
                 content: "Ben Mak's extraordinary qualifications for the highest honors have been recognized through an OBE nomination interview."
             },
@@ -169,7 +173,7 @@
                 name: "Liverpool College",
                 title: "EDUCATIONAL EXCELLENCE",
                 subtitle: "ACADEMIC RECOGNITION",
-                imgUrl: "assets/Logo%20final/processed_lliverpool%20collehe%20.png",
+                imgUrl: "/assets/organized/logos/processed_lliverpool collehe .png",
                 color: "#14B8A6",
                 content: "Recognition from Liverpool College for academic excellence and contributions to educational advancement."
             },
@@ -178,7 +182,7 @@
                 name: "UK Parliament",
                 title: "PARLIAMENTARY RECOGNITION",
                 subtitle: "LEGISLATIVE ENGAGEMENT",
-                imgUrl: "assets/Logo%20final/processed_UK-Parliament-Logo-1536x864.png",
+                imgUrl: "/assets/organized/logos/processed_UK-Parliament-Logo-1536x864.png",
                 color: "#8B5CF6",
                 content: "Acknowledgment from UK Parliament for contributions to legislative discourse and policy development."
             },
@@ -187,7 +191,7 @@
                 name: "Cumbria Police",
                 title: "SENIOR DETECTIVE COMMENDATION",
                 subtitle: "LEGAL EXPERTISE & RESILIENCE",
-                imgUrl: "assets/Logo%20final/cumbria%20police.png",
+                imgUrl: "/assets/organized/logos/cumbria police.png",
                 color: "#DC2626",
                 content: "\"Mr. MAK's exceptional understanding of complex legal statutes proved vital in a serious police investigation. His ability to articulate and break down intricate legal concepts into actionable intelligence was remarkable. Despite facing severe personal challenges, his resilience and professional approach remained exemplary.\" — Senior Detective, Cumbria Police (2023)"
             }
@@ -352,8 +356,13 @@
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<LogoCarousel />);
+        document.addEventListener('DOMContentLoaded', function() {
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                const root = ReactDOM.createRoot(rootElement);
+                root.render(<LogoCarousel />);
+            }
+        });
     </script>
 	<script>
         const certificates = [
@@ -411,81 +420,90 @@
             }
         ];
 
-        const sliderContent = document.querySelector('.slider-content');
-        const modal = document.querySelector('.modal');
-        const modalImage = document.querySelector('.modal-image');
-        const modalTitle = document.querySelector('.modal-title');
-        const closeButton = document.querySelector('.close-button');
-        
-        certificates.forEach((cert, index) => {
-            const angle = (360 / certificates.length) * index;
-            const item = document.createElement('div');
-            item.className = 'item';
-            item.style.transform = `rotateY(${angle}deg) translateZ(600px)`;
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliderContent = document.querySelector('.slider-content');
+            const modal = document.querySelector('.modal');
+            const modalImage = document.querySelector('.modal-image');
+            const modalTitle = document.querySelector('.modal-title');
+            const closeButton = document.querySelector('.close-button');
             
-            item.innerHTML = `
-                <div class="item-content">
-                    <div class="item-front">
-                        <img src="${cert.src}" alt="${cert.title}" class="certificate-image">
-                        <div class="official-seal"></div>
-                    </div>
-                    <div class="item-back">
-                        <img src="../FInal%20website/assets/CERTIFICATES%20ENDORESEMENTS/logo.png" alt="Justice Minds Logo" class="back-logo">
-                    </div>
-                </div>
-            `;
-            
-            item.querySelector('.item-front').addEventListener('click', () => {
-                modalImage.src = cert.src;
-                modalTitle.textContent = cert.title;
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                sliderContent.style.animationPlayState = 'paused';
-                
-                // Add smooth entrance animation
-                modalImage.style.opacity = '0';
-                modalTitle.style.opacity = '0';
-                modalImage.style.transform = 'scale(0.95)';
-                
-                setTimeout(() => {
-                    modalImage.style.opacity = '0.95';
-                    modalTitle.style.opacity = '1';
-                    modalImage.style.transform = 'scale(1)';
-                }, 50);
-            });
-            
-            sliderContent.appendChild(item);
-        });
+            if (sliderContent && modal && modalImage && modalTitle && closeButton) {
+                certificates.forEach((cert, index) => {
+                    const angle = (360 / certificates.length) * index;
+                    const item = document.createElement('div');
+                    item.className = 'item';
+                    item.style.transform = `rotateY(${angle}deg) translateZ(600px)`;
+                    
+                    item.innerHTML = `
+                        <div class="item-content">
+                            <div class="item-front">
+                                <img src="${cert.src}" alt="${cert.title}" class="certificate-image">
+                                <div class="official-seal"></div>
+                            </div>
+                            <div class="item-back">
+                                <img src="/assets/organized/logos/logosite.png" alt="Justice Minds Logo" class="back-logo">
+                            </div>
+                        </div>
+                    `;
+                    
+                    item.querySelector('.item-front').addEventListener('click', () => {
+                        modalImage.src = cert.src;
+                        modalTitle.textContent = cert.title;
+                        modal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                        sliderContent.style.animationPlayState = 'paused';
+                        
+                        // Add smooth entrance animation
+                        modalImage.style.opacity = '0';
+                        modalTitle.style.opacity = '0';
+                        modalImage.style.transform = 'scale(0.95)';
+                        
+                        setTimeout(() => {
+                            modalImage.style.opacity = '0.95';
+                            modalTitle.style.opacity = '1';
+                            modalImage.style.transform = 'scale(1)';
+                        }, 50);
+                    });
+                    
+                    sliderContent.appendChild(item);
+                });
 
-        const resumeCarousel = () => {
-            // Add smooth exit animation
-            modalImage.style.opacity = '0';
-            modalTitle.style.opacity = '0';
-            modalImage.style.transform = 'scale(0.95)';
-            
-            setTimeout(() => {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                sliderContent.style.animationPlayState = 'running';
-            }, 200);
-        };
+                const resumeCarousel = () => {
+                    // Add smooth exit animation
+                    modalImage.style.opacity = '0';
+                    modalTitle.style.opacity = '0';
+                    modalImage.style.transform = 'scale(0.95)';
+                    
+                    setTimeout(() => {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                        sliderContent.style.animationPlayState = 'running';
+                    }, 200);
+                };
 
-        closeButton.addEventListener('click', resumeCarousel);
-        document.querySelector('.back-button').addEventListener('click', resumeCarousel);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                resumeCarousel();
+                closeButton.addEventListener('click', resumeCarousel);
+                
+                const backButton = document.querySelector('.back-button');
+                if (backButton) {
+                    backButton.addEventListener('click', resumeCarousel);
+                }
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        resumeCarousel();
+                    }
+                });
+
+                // Preload images
+                certificates.forEach(cert => {
+                    const img = new Image();
+                    img.src = cert.src;
+                });
             }
-        });
 
-        // Preload images
-        certificates.forEach(cert => {
-            const img = new Image();
-            img.src = cert.src;
+            const logoImg = new Image();
+            logoImg.src = '/assets/organized/logos/logosite.png';
         });
-
-        const logoImg = new Image();
-        logoImg.src = '../FInal%20website/assets/CERTIFICATES%20ENDORESEMENTS/logo.png';
         
         // Enhanced dropdown functionality
         document.addEventListener('DOMContentLoaded', function() {
@@ -494,71 +512,75 @@
             const dropdownContent = document.querySelector('.dropdown-content');
             let isDropdownOpen = false;
             
-            // Toggle dropdown on click
-            dropdownToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!isDropdownOpen) {
+            // Only add event listeners if the elements exist
+            if (dropdown && dropdownToggle && dropdownContent) {
+                // Toggle dropdown on click
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!isDropdownOpen) {
+                        dropdownContent.classList.add('active');
+                        isDropdownOpen = true;
+                    } else {
+                        dropdownContent.classList.remove('active');
+                        isDropdownOpen = false;
+                    }
+                });
+                
+                // Show dropdown on hover and keep it visible
+                dropdown.addEventListener('mouseenter', function() {
                     dropdownContent.classList.add('active');
                     isDropdownOpen = true;
-                } else {
-                    dropdownContent.classList.remove('active');
-                    isDropdownOpen = false;
-                }
-            });
-            
-            // Show dropdown on hover and keep it visible
-            dropdown.addEventListener('mouseenter', function() {
-                dropdownContent.classList.add('active');
-                isDropdownOpen = true;
-            });
-            
-            // Keep dropdown visible when hovering over it
-            dropdownContent.addEventListener('mouseenter', function() {
-                dropdownContent.classList.add('active');
-                isDropdownOpen = true;
-            });
-            
-            // Only hide dropdown when mouse leaves both the toggle and the content
-            dropdown.addEventListener('mouseleave', function(e) {
-                // Check if mouse is moving to the dropdown content
-                if (!e.relatedTarget || !dropdown.contains(e.relatedTarget)) {
-                    // Use a timeout to allow moving to the dropdown content
-                    setTimeout(function() {
-                        if (!dropdown.matches(':hover') && !dropdownContent.matches(':hover')) {
-                            dropdownContent.classList.remove('active');
-                            isDropdownOpen = false;
-                        }
-                    }, 100);
-                }
-            });
-            
-            dropdownContent.addEventListener('mouseleave', function() {
-                if (!dropdown.matches(':hover')) {
-                    dropdownContent.classList.remove('active');
-                    isDropdownOpen = false;
-                }
-            });
-            
-            // Prevent dropdown from closing when clicking inside it
-            dropdownContent.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!dropdown.contains(e.target)) {
-                    dropdownContent.classList.remove('active');
-                    isDropdownOpen = false;
-                }
-            });
+                });
+                
+                // Keep dropdown visible when hovering over it
+                dropdownContent.addEventListener('mouseenter', function() {
+                    dropdownContent.classList.add('active');
+                    isDropdownOpen = true;
+                });
+                
+                // Only hide dropdown when mouse leaves both the toggle and the content
+                dropdown.addEventListener('mouseleave', function(e) {
+                    // Check if mouse is moving to the dropdown content
+                    if (!e.relatedTarget || !dropdown.contains(e.relatedTarget)) {
+                        // Use a timeout to allow moving to the dropdown content
+                        setTimeout(function() {
+                            if (!dropdown.matches(':hover') && !dropdownContent.matches(':hover')) {
+                                dropdownContent.classList.remove('active');
+                                isDropdownOpen = false;
+                            }
+                        }, 100);
+                    }
+                });
+                
+                dropdownContent.addEventListener('mouseleave', function() {
+                    if (!dropdown.matches(':hover')) {
+                        dropdownContent.classList.remove('active');
+                        isDropdownOpen = false;
+                    }
+                });
+                
+                // Prevent dropdown from closing when clicking inside it
+                dropdownContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!dropdown.contains(e.target)) {
+                        dropdownContent.classList.remove('active');
+                        isDropdownOpen = false;
+                    }
+                });
+            }
             
             // News search - open in new window
             const searchLink = document.querySelector('a[href="#search"]');
-            
-            searchLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.open('/Users/infiniteintelligence/Indian Genius/benmak/sarasearch.html', '_blank');
-            });
+            if (searchLink) {
+                searchLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.open('/search', '_blank');
+                });
+            }
         });
     </script>
 </html>
