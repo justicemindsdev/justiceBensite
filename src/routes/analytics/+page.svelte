@@ -121,6 +121,140 @@
         selectedEndorsement = null;
         endorsementVisible = false;
     }
+    
+    // Initialize the carousel when the component is mounted
+    onMount(() => {
+        // Create a div for the React carousel
+        const carouselContainer = document.getElementById('endorsement-carousel-container');
+        if (carouselContainer) {
+            // Initialize the React carousel
+            const script = document.createElement('script');
+            script.type = 'text/babel';
+            script.innerHTML = `
+                const { motion, AnimatePresence } = window.Motion;
+                const { useState, useEffect } = React;
+
+                const LogoCarousel = () => {
+                    const [selectedCard, setSelectedCard] = useState(null);
+                    const [isVisible, setIsVisible] = useState(false);
+
+                    useEffect(() => {
+                        if (selectedCard) {
+                            const timer = setTimeout(() => setIsVisible(true), 100);
+                            return () => clearTimeout(timer);
+                        }
+                        setIsVisible(false);
+                    }, [selectedCard]);
+
+                    const CarouselRow = ({ direction = 1, speed = 40, startIndex = 0 }) => {
+                        const shiftedEndorsements = [...${JSON.stringify(endorsements)}.slice(startIndex), ...${JSON.stringify(endorsements)}.slice(0, startIndex)];
+                        return (
+                            <motion.div
+                                className="flex items-center gap-8"
+                                animate={{
+                                    x: direction > 0 ? [0, -1920] : [-1920, 0],
+                                }}
+                                transition={{
+                                    x: {
+                                        repeat: Infinity,
+                                        duration: speed,
+                                        ease: "linear",
+                                    },
+                                }}
+                                style={{
+                                    paddingTop: "1rem",
+                                    paddingBottom: "1rem",
+                                }}
+                            >
+                                {[...shiftedEndorsements, ...shiftedEndorsements].map((endorsement, index) => (
+                                <motion.div
+                                    key={\`\${endorsement.id}-\${index}\`}
+                                    className="flex-shrink-0"
+                                    whileHover={{ 
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 }
+                                    }}
+                                    onClick={() => window.showEndorsementDetail(endorsement.id)}
+                                >
+                                    <div className="relative w-96 h-64 rounded-2xl overflow-hidden flex items-start justify-center card-shadow card-fade">
+                                        <div className="absolute inset-0 flex flex-col items-center">
+                                            <div className="flex-1 flex items-center justify-center -mt-4">
+                                                <img
+                                                    src={endorsement.logo}
+                                                    alt={endorsement.title}
+                                                    className={\`object-contain opacity-100 transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] \${
+                                                        endorsement.title.includes("LIVERPOOL CITY COUNCIL") 
+                                                            ? "w-28 h-40 -mt-8 mb-4" // Move up and add space below
+                                                            : endorsement.title.includes("OBE")
+                                                                ? "w-32 h-32 -mt-8 mb-4" // Move up and add space below
+                                                            : endorsement.title.includes("HEALTH")
+                                                                ? "w-48 h-28 -mt-8" // Smaller and raised health logo
+                                                            : endorsement.title.includes("POLICE")
+                                                                ? "w-36 h-36 -mt-4" // Smaller Cumbria Police logo
+                                                                : "w-48 h-48" // Default size for other logos
+                                                    }\`}
+                                                    style={{ filter: 'brightness(1.4) contrast(0.95)' }}
+                                                />
+                                            </div>
+                                            <div className="absolute bottom-4 left-0 right-0 text-center flex flex-col items-center gap-1">
+                                                <h3 className="text-l font-thin tracking-wide text-white text-shadow whitespace-nowrap px-2">
+                                                    {endorsement.title}
+                                                </h3>
+                                                <p className="text-sm text-gray-400">
+                                                    {endorsement.subtitle}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                            </motion.div>
+                        );
+                    };
+
+                    return (
+                        <>
+                            <div className="page-gradient"></div>
+                            <div className="w-full overflow-hidden py-10">
+                                <div className="relative max-w-7xl mx-auto px-4">
+                                    <div className="text-center mb-8">
+                                        <h2 className="text-3xl font-thin text-white tracking-wider mb-2">
+                                            ENDORSEMENTS CAROUSEL
+                                        </h2>
+                                        <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent mx-auto"></div>
+                                    </div>
+
+                                    <div className="relative overflow-hidden">
+                                        <div className="space-y-12 fade-edges">
+                                            <CarouselRow direction={1} speed={40} startIndex={0} />
+                                            <CarouselRow direction={-1} speed={35} startIndex={5} />
+                                            <CarouselRow direction={1} speed={45} startIndex={7} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    );
+                };
+
+                // Expose a function to show endorsement details
+                window.showEndorsementDetail = (id) => {
+                    // Call the Svelte function to show endorsement details
+                    if (typeof window.svelte_showEndorsement === 'function') {
+                        window.svelte_showEndorsement(id);
+                    }
+                };
+
+                // Render the carousel
+                const root = ReactDOM.createRoot(document.getElementById('endorsement-carousel-container'));
+                root.render(<LogoCarousel />);
+            `;
+            document.body.appendChild(script);
+            
+            // Expose the showEndorsement function to the window object
+            window.svelte_showEndorsement = showEndorsement;
+        }
+    });
 </script>
 
 <Navbar />
@@ -149,6 +283,16 @@
             </div>
             
             <SVGAnalyzer svgUrl={selectedSvg.url} />
+        </section>
+        
+        <!-- Endorsement Carousel Section -->
+        <section class="dashboard-section carousel-section">
+            <h2>Endorsement Carousel</h2>
+            <p class="section-description">
+                Interactive carousel displaying endorsements with multiple rows moving in different directions.
+            </p>
+            
+            <div id="endorsement-carousel-container" class="endorsement-carousel"></div>
         </section>
         
         <!-- Chunked Content Section -->
@@ -303,22 +447,58 @@
         padding: 2rem;
     }
     
-    .card-shadow {
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
+    body {
+        font-family: "IBM Plex Serif";
+        font-weight: 300;
+        color: white;
     }
-
+    
+    .page-gradient {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(
+            circle at center,
+            rgba(15, 23, 42, 0.3) 0%,
+            rgba(0, 0, 0, 0.95) 100%
+        );
+        z-index: -1;
+    }
+    
+    .card-shadow {
+        box-shadow: 
+            0 0 40px rgba(0, 0, 0, 0.5),
+            0 0 20px rgba(0, 0, 0, 0.3);
+    }
+    
     .card-fade {
-        background: linear-gradient(145deg, rgba(15, 23, 42, 0.7) 0%, rgba(0, 0, 0, 0.95) 100%);
+        background: linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.7) 0%,
+            rgba(0, 0, 0, 0.95) 100%
+        );
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
+    .fade-edges {
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 15%,
+            black 85%,
+            transparent
+        );
+    }
+    
+    .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
     
     /* Typewriter effect */
     @keyframes typewriter {
         from { width: 0; }
         to { width: 100%; }
     }
-
+    
     .typewriter {
         overflow: hidden;
         white-space: nowrap;
@@ -335,7 +515,7 @@
         padding: 2rem;
         margin-bottom: 2rem;
     }
-
+    
     .visible .endorsement-content {
         opacity: 1;
         transform: translateY(0);
@@ -369,7 +549,7 @@
     /* Back button styling */
     .back-button {
         position: fixed;
-        bottom: 2rem;
+        bottom: -6rem;
         left: 50%;
         transform: translateX(-50%);
         padding: 0.75rem 2rem;
@@ -385,9 +565,27 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     
+    /* Mobile responsiveness for back button */
+    @media (max-width: 768px) {
+        .back-button {
+            bottom: -8rem; /* Move even further down on mobile */
+            padding: 0.6rem 1.5rem; /* Slightly smaller padding */
+            font-size: 0.9rem; /* Slightly smaller font */
+            width: auto; /* Allow button to size to content */
+            max-width: 80%; /* Prevent button from being too wide */
+        }
+    }
+    
     .back-button:hover {
         background: rgba(59, 130, 246, 0.9);
         transform: translateX(-50%) translateY(-2px);
+    }
+    
+    .title-wrap {
+        white-space: normal;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.2;
     }
     
     .view-details {
@@ -396,6 +594,16 @@
         color: #3b82f6;
         text-align: right;
     }
+    
+    /* Carousel styles */
+    .endorsement-carousel {
+        width: 100%;
+        overflow: hidden;
+        margin: 1rem 0;
+        position: relative;
+        min-height: 400px;
+    }
+    
     .analytics-page {
         background-color: #111827;
         color: #e5e7eb;
@@ -418,6 +626,9 @@
         border-radius: 0.5rem;
         margin-bottom: 1rem;
         border-left: 3px solid #10b981;
+        text-align: left;
+        width: 100%;
+        display: block;
     }
     
     .endorsement-header {
@@ -497,7 +708,12 @@
         
         .svg-section {
             grid-column: 1 / 2;
-            grid-row: 1 / 3;
+            grid-row: 1 / 2;
+        }
+        
+        .carousel-section {
+            grid-column: 1 / 3;
+            grid-row: 2 / 3;
         }
         
         .chunked-section {
@@ -506,8 +722,8 @@
         }
         
         .stats-section {
-            grid-column: 2 / 3;
-            grid-row: 2 / 3;
+            grid-column: 1 / 3;
+            grid-row: 3 / 4;
         }
     }
     
